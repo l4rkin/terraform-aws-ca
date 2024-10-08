@@ -18,6 +18,11 @@ variable "cert_info_files" {
   default     = [] # To enable certificate revocation change to ["tls", "revoked", "revoked-root-ca"]
 }
 
+variable "config_ssm_parameter_name" {
+  description = "Name of the SSM Parameter to store configuration information under"
+  default     = "serverlessca-config"
+}
+
 variable "csr_files" {
   description = "List of CSR file names to be uploaded to internal S3 bucket for processing"
   default     = []

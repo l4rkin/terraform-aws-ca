@@ -16,6 +16,18 @@ module "dynamodb" {
   kms_arn_resource = var.kms_arn_resource == "" ? module.kms_tls_keygen.kms_arn : var.kms_arn_resource
 }
 
+module "configuration_info_ssm_param" {
+  # Stores information about the configuration of ServerlessCA for parsing by external tools
+  source          = "./modules/terraform-aws-ca-ssm"
+  kms_arn         = var.kms_arn_resource == "" ? module.kms_tls_keygen.kms_arn : var.kms_arn_resource
+  parameter_key   = var.config_ssm_parameter_name
+  parameter_value = {
+    project = var.project
+    env     = var.env
+    region  = data.aws_region.current.name
+  }
+}
+
 module "external_s3" {
   #checkov:skip=CKV2_AWS_61:Lifecycle configuration not needed for long-lived static content
   # S3 bucket for CRL and CA certificate publication
